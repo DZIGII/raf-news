@@ -38,6 +38,18 @@ export class Comment extends Model {
     })
     declare createdAt: Date;
 
+    @Column({
+      type: DataType.INTEGER.UNSIGNED,
+      defaultValue: 0
+    })
+    like!: number
+
+    @Column({
+      type: DataType.INTEGER.UNSIGNED,
+      defaultValue: 0
+    })
+    dislike!: number
+
     @ForeignKey(() => News)
     @Column({
         type: DataType.INTEGER.UNSIGNED,

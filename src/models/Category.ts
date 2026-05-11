@@ -1,7 +1,6 @@
 import {
   Table, Column, Model, DataType,
-  PrimaryKey, AutoIncrement, Unique,
-  AllowNull
+  PrimaryKey, AutoIncrement, Unique
 } from 'sequelize-typescript'
 
 
@@ -31,9 +30,9 @@ export class Category extends Model {
     @Column({
         type: DataType.STRING,
         allowNull: false,
-        field: "desctiption"
+        field: "description"
     })
-    desctiption!: string
+    description!: string
 
 
 }

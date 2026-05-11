@@ -51,6 +51,19 @@ export class News extends Model {
     })
     declare createdAt: Date;
 
+    @Column({
+      type: DataType.INTEGER.UNSIGNED,
+      defaultValue: 0
+    })
+    like!: number
+
+    @Column({
+      type: DataType.INTEGER.UNSIGNED,
+      defaultValue: 0
+    })
+    dislike!: number
+
+
     @ForeignKey(() => User)
     @Column({
         type: DataType.INTEGER.UNSIGNED,

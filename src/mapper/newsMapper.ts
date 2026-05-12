@@ -10,6 +10,7 @@ export function toNewsDetailResponseDto(news: News): NewsDetailResponseDto {
         createdAt: news.createdAt,
         like: news.like,
         dislike: news.dislike,
+        numberOfVisits: news.numberOfVisits,
         createdBy: news.createdBy,
         comments: news.comments,
         images: news.images

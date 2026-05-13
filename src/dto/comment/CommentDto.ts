@@ -3,4 +3,5 @@ export interface CommentDto {
     authorName: string;
     content: string;
     createdAt: Date;
+    newsId: number;
 }

@@ -1,4 +1,6 @@
+import { CategoryDto } from "../category/CategoryDto";
 import { CommentDto } from "../comment/CommentDto";
+import { CommentResponseDto } from "../comment/CommentResponseDto";
 import { ImageDto } from "../image/ImageDto";
 import { UserResponseDto } from "../user/UserResponseDto";
 
@@ -8,7 +10,11 @@ export interface NewsDetailResponseDto {
     text: string;
     visits: number;
     createdAt: Date;
+    like: number;
+    dislike: number;
+    numberOfVisits: number;
     createdBy: UserResponseDto;
-    comments: CommentDto[];
+    category: CategoryDto;
+    comments: CommentResponseDto[];
     images: ImageDto[];
 }

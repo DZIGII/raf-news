@@ -1,12 +1,14 @@
 import {
   Table, Column, Model, DataType,
-  PrimaryKey, AutoIncrement, ForeignKey, BelongsTo, BelongsToMany, HasMany
+  PrimaryKey, AutoIncrement, ForeignKey, BelongsTo, BelongsToMany, HasMany,
+  AllowNull
 } from 'sequelize-typescript'
 import { User } from './User'
 import { Tag } from './Tag'
 import { NewsTag } from './NewsTag'
 import { Comment } from './Comment'
 import { NewsImage } from './NewsImage'
+import { Category } from './Category'
 
 @Table({
     tableName: "news",
@@ -63,6 +65,11 @@ export class News extends Model {
     })
     dislike!: number
 
+    @Column({
+        type: DataType.INTEGER.UNSIGNED,
+        defaultValue: 0
+    })
+    numberOfVisits!: number
 
     @ForeignKey(() => User)
     @Column({
@@ -71,6 +78,17 @@ export class News extends Model {
         field: "user_id"
     })
     userId!: number;
+
+    @ForeignKey(() => Category)
+    @Column({
+        type: DataType.INTEGER.UNSIGNED,
+        allowNull: false,
+        field: "category_id"
+    })
+    categoryId!: number
+
+    @BelongsTo(() => Category)
+    category!: Category
 
     @BelongsTo(() => User)
     createdBy!: User;

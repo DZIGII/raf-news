@@ -4,6 +4,8 @@ import express, {Request, Response} from 'express'
 import { sequelize } from './database/database';
 import swaggerUi from 'swagger-ui-express'
 import { swaggerSpec } from './config/swagger'
+import userRoutes from "./routes/user.router";
+
 
 
 
@@ -12,6 +14,9 @@ const PORT = 3000;
 
 app.use(express.json())
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
+app.use('/uploads', express.static('uploads'))
+app.use("/users", userRoutes)
+
 
 app.get('/', (_req: Request, res: Response) => {
     res.json({message: 'test'})

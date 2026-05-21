@@ -16,47 +16,47 @@ export class User extends Model {
         type: DataType.INTEGER.UNSIGNED,
         field: "user_id"
     })
-    userId!: number;
+    declare userId: number;
 
     @Column({
         type: DataType.STRING,
         allowNull: false,
         field: "first_name",
     })
-    firstName!: string;
+    declare firstName: string;
 
     @Column({
         type: DataType.STRING,
         allowNull: false,
         field: "last_name"
     })
-    lastName!: string;
+    declare lastName: string;
 
     @Unique
     @Column({
         type: DataType.STRING,
         allowNull: false
     })
-    email!: string;
+    declare email: string;
 
     @Column({
         type: DataType.STRING,
         allowNull: false,
         field: "password_hash"
     })
-    password!: string;
+    declare password: string;
 
     @Column({
         type: DataType.ENUM('ADMIN', 'CREATOR'),
         field: "role",
         defaultValue: 'CREATOR'
     })
-    role!: "ADMIN" | "CREATOR";
+    declare role: "ADMIN" | "CREATOR";
 
     @Column({
         type: DataType.BOOLEAN,
         field: "is_active",
         defaultValue: true
     })
-    isActive!: boolean
+    declare isActive: boolean
 }

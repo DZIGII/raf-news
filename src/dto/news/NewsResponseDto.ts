@@ -1,5 +1,5 @@
 export interface NewsResponseDto {
-    newsId:number;
+    newsId: number;
     title: string;
     mainImage: string | null;
     tagIds: number[];

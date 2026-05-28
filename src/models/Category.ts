@@ -34,5 +34,4 @@ export class Category extends Model {
     })
     description!: string
 
-
 }

@@ -6,6 +6,7 @@ import { Tag } from "../models/Tag";
 import { Comment } from '../models/Comment';
 import { NewsImage } from '../models/NewsImage';
 import { Category } from '../models/Category';
+import { NewsVisits } from '../models/NewsVisits';
 
 export const sequelize = new Sequelize({
     dialect: 'postgres',
@@ -14,5 +15,5 @@ export const sequelize = new Sequelize({
     database: process.env.DB_NAME!,
     username: process.env.DB_USER!,
     password: String(process.env.DB_PASS)!,
-    models: [User, News, Tag, NewsTag, Comment, NewsImage, Category]
+    models: [User, News, Tag, NewsTag, Comment, NewsImage, Category, NewsVisits]
 })

@@ -5,11 +5,16 @@ import { toNewsDetailResponseDto, toNewsResponseDto } from "../mapper/newsMapper
 import { NewsRepository } from "../repository/news.reporitory";
 import { TagRepository } from "../repository/tag.repository";
 import { NewsTag } from "../models/NewsTag";
+import { Jwt, JwtPayload } from "jsonwebtoken";
+import { NewsImageRepository } from "../repository/newsImage.repository";
+import { NewsVisitsRepository } from "../repository/newsVisits.repository";
 
 export class NewsService {
 
     private newsRepository = new NewsRepository()
     private tagRepository = new TagRepository()
+    private imageRepository = new NewsImageRepository()
+    private newsVisitsRepository = new NewsVisitsRepository()
 
     async findAll(limit: number, offset: number): Promise<NewsResponseDto[]> {
         const news = await this.newsRepository.findAll(limit, offset)
@@ -23,11 +28,23 @@ export class NewsService {
         return toNewsDetailResponseDto(news)
     }
 
-    async create(dto: CreateNewsDto): Promise<NewsDetailResponseDto> {
+    async findMostRead(): Promise<NewsResponseDto[]> {
+        const topVisits = await this.newsVisitsRepository.findMostRead(30, 10)
+        const result: NewsResponseDto[] = []
+
+        for (const visit of topVisits) {
+            const news = await this.newsRepository.findByPk(visit.newsId)
+            if (news) result.push(toNewsResponseDto(news))
+        }
+
+        return result
+    }
+
+    async create(dto: CreateNewsDto, user: JwtPayload, files: Express.Multer.File[]): Promise<NewsDetailResponseDto> {
         const created = await this.newsRepository.createNews({
             title: dto.title,
             text: dto.text,
-            userId: dto.user.userId
+            userId: user.userId
         })
 
         if (dto.tags && dto.tags.length > 0) {
@@ -44,6 +61,11 @@ export class NewsService {
             }
         }
 
+        for (const file of files) {
+            const imageUrl = `/uploads/${file.filename}`
+            await this.imageRepository.create(created.newsId, imageUrl)
+        }
+
         const news = await this.newsRepository.findByPk(created.newsId)
         if (!news) throw new Error('News not found')
 
@@ -51,19 +73,20 @@ export class NewsService {
     }
 
 
-    async update(id: number, dto: CreateNewsDto): Promise<NewsDetailResponseDto> {
+    async update(id: number, dto: CreateNewsDto, user: JwtPayload, files: Express.Multer.File[]): Promise<NewsDetailResponseDto> {
         const news = await this.newsRepository.findByPk(id)
         if (!news) throw new Error('News does not exist')
+
+        if (user.role !== 'ADMIN' && user.userId !== news.userId)
+            throw new Error('You are not allowed to do that')
 
         const oldTagIds = news.tags.map(tag => tag.tagId)
 
         await this.newsRepository.updateNews(id, {
             title: dto.title,
             text: dto.text,
-            userId: dto.user.userId
         })
 
-        // remove old tag relations and add new ones
         await NewsTag.destroy({ where: { newsId: id } })
 
         const newTagIds: number[] = []
@@ -76,7 +99,6 @@ export class NewsService {
             await NewsTag.create({ newsId: id, tagId: tag.tagId })
         }
 
-        // delete tags that are no longer linked to any news
         for (const oldTagId of oldTagIds) {
             if (!newTagIds.includes(oldTagId)) {
                 const count = await NewsTag.count({ where: { tagId: oldTagId } })
@@ -86,6 +108,11 @@ export class NewsService {
             }
         }
 
+        for (const file of files) {
+            const imageUrl = `/uploads/${file.filename}`
+            await this.imageRepository.create(id, imageUrl)
+        }
+
         const updated = await this.newsRepository.findByPk(id)
         if (!updated) throw new Error('News not found')
 
@@ -93,15 +120,20 @@ export class NewsService {
     }
     
 
-    async delete(id: number): Promise<void> {
+    async delete(id: number, user: JwtPayload): Promise<void> {
         const news = await this.newsRepository.findByPk(id)
         if (!news) throw new Error('News does not exist')
+
+        if (user.role !== 'ADMIN' || user.userId !== news.userId) 
+            throw new Error('You are not allow to do that')
+        
 
         await this.newsRepository.deleteNews(id)
     }
 
-    async findFiltered(search: string, limit: number, offset: number): Promise<NewsResponseDto[]> {
-        const news = await this.newsRepository.findFiltered(search, limit, offset)
+    async findFiltered(search: string | undefined, categoryId: number | undefined, limit: number, offset: number): Promise<NewsResponseDto[]> {
+        const news = await this.newsRepository.findFiltered(search, categoryId, limit, offset)
         return news.map(toNewsResponseDto)
     }
+
 }

@@ -75,7 +75,8 @@ export class News extends Model {
     @Column({
         type: DataType.INTEGER.UNSIGNED,
         allowNull: false,
-        field: "user_id"
+        field: "user_id",
+        onDelete: 'CASCADE'
     })
     userId!: number;
 
@@ -96,9 +97,9 @@ export class News extends Model {
     @BelongsToMany(() => Tag, () => NewsTag)
     tags!: Tag[]
 
-    @HasMany(() => Comment)
+    @HasMany(() => Comment, {onDelete: 'CASCADE', hooks: true})
     comments!: Comment[]
 
-    @HasMany(() => NewsImage)
+    @HasMany(() => NewsImage, {onDelete: 'CASCADE', hooks: true})
     images!: NewsImage[]
 }

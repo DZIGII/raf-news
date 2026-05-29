@@ -24,6 +24,7 @@ export class NewsService {
     async newsDetail(id: number): Promise<NewsDetailResponseDto> {
         const news = await this.newsRepository.findByPk(id)
         if (!news) throw new Error('News does not exist')
+        await this.newsVisitsRepository.logVisit(id)
 
         return toNewsDetailResponseDto(news)
     }
@@ -133,6 +134,11 @@ export class NewsService {
 
     async findFiltered(search: string | undefined, categoryId: number | undefined, limit: number, offset: number): Promise<NewsResponseDto[]> {
         const news = await this.newsRepository.findFiltered(search, categoryId, limit, offset)
+        return news.map(toNewsResponseDto)
+    }
+
+    async findByTagId(tagId: number, limit: number, offset: number): Promise<NewsResponseDto[]> {
+        const news = await this.newsRepository.findByTagId(tagId, limit, offset)
         return news.map(toNewsResponseDto)
     }
 

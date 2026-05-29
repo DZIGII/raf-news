@@ -1,6 +1,7 @@
 import { Op } from "sequelize";
 import { News } from "../models/News";
 import { Category } from "../models/Category";
+import { Tag } from "../models/Tag";
 
 export class NewsRepository {
 
@@ -24,6 +25,22 @@ export class NewsRepository {
 
     async deleteNews(newsId: number) {
         await News.destroy({where:{newsId}})
+    }
+
+    async countByCategoryId(categoryId: number): Promise<number> {
+        return News.count({ where: { categoryId } })
+    }
+
+    async findByTagId(tagId: number, limit: number, offset: number): Promise<News[]> {
+        return News.findAll({
+            include: [{
+                model: Tag,
+                where: { tagId },
+                through: { attributes: [] }
+            }],
+            limit,
+            offset
+        })
     }
 
     async findFiltered(search: string | undefined, categoryId: number | undefined, limit: number, offset: number): Promise<News[]> {

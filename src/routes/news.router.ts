@@ -122,6 +122,47 @@ router.get("/filter", (req, res) => {
 
 /**
  * @openapi
+ * /news/tag/{tagId}:
+ *   get:
+ *     tags: [News]
+ *     summary: Get news articles related to a tag
+ *     description: Returns a paginated list of articles that have the given tag applied.
+ *     parameters:
+ *       - in: path
+ *         name: tagId
+ *         required: true
+ *         schema: { type: integer }
+ *         description: Tag id
+ *       - in: query
+ *         name: limit
+ *         schema: { type: integer, default: 10 }
+ *         description: Page size
+ *       - in: query
+ *         name: page
+ *         schema: { type: integer, default: 1 }
+ *         description: 1-based page number
+ *     responses:
+ *       200:
+ *         description: List of news with the given tag
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/NewsResponseDto'
+ *       400:
+ *         description: Lookup failed
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ */
+router.get("/tag/:tagId", (req, res) => {
+    newsController.findByTag(req, res)
+})
+
+/**
+ * @openapi
  * /news/{id}:
  *   get:
  *     tags: [News]

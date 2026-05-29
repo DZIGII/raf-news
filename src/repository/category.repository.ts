@@ -18,14 +18,14 @@ export class CategoryRepository {
         return Category.create(data)
     }
 
-    async updateCategory(id: number, data: Partial<Category>): Promise<Category> {
-        const ctg = await Category.findByPk(id)
+    async updateCategory(data: Partial<Category>): Promise<Category> {
+        const ctg = await Category.findByPk(data.categoryId)
         if (!ctg) throw new Error('Category dosent exist')
         return ctg.update(data)
     }
 
     async deleteCategoryByPk(id: number) {
-        await Category.destroy({where: {id}})
+        await Category.destroy({where: {categoryId: id}})
     }
     
 }

@@ -70,15 +70,41 @@ const options = {
                 },
                 TagDto: {
                     type: 'object',
+                    required: ['keyword'],
                     properties: {
+                        keyword: { type: 'string', example: 'sport' },
+                    },
+                },
+                TagResponseDto: {
+                    type: 'object',
+                    properties: {
+                        tagId: { type: 'integer', example: 1 },
                         keyword: { type: 'string', example: 'sport' },
                     },
                 },
                 CategoryDto: {
                     type: 'object',
+                    required: ['categoryId', 'name', 'description'],
                     properties: {
                         categoryId: { type: 'integer', example: 1 },
                         name: { type: 'string', example: 'Sports' },
+                        description: { type: 'string', example: 'Sports news, scores, and analysis' },
+                    },
+                },
+                CategoryResponseDto: {
+                    type: 'object',
+                    properties: {
+                        categoryId: { type: 'integer', example: 1 },
+                        name: { type: 'string', example: 'Sports' },
+                        description: { type: 'string', example: 'Sports news, scores, and analysis' },
+                    },
+                },
+                CreateCategoryDto: {
+                    type: 'object',
+                    required: ['name', 'description'],
+                    properties: {
+                        name: { type: 'string', example: 'Sports' },
+                        description: { type: 'string', example: 'Sports news, scores, and analysis' },
                     },
                 },
                 ImageDto: {
@@ -91,10 +117,20 @@ const options = {
                 CommentResponseDto: {
                     type: 'object',
                     properties: {
-                        commentId: { type: 'integer' },
-                        text: { type: 'string' },
+                        authorName: { type: 'string', example: 'Marko' },
+                        content: { type: 'string', example: 'Great article!' },
                         createdAt: { type: 'string', format: 'date-time' },
-                        createdBy: { $ref: '#/components/schemas/UserResponseDto' },
+                        like: { type: 'integer', example: 12 },
+                        dislike: { type: 'integer', example: 1 },
+                    },
+                },
+                CreateCommentDto: {
+                    type: 'object',
+                    required: ['authorName', 'content', 'newsId'],
+                    properties: {
+                        authorName: { type: 'string', example: 'Marko' },
+                        content: { type: 'string', example: 'Great article!' },
+                        newsId: { type: 'integer', example: 1 },
                     },
                 },
                 NewsResponseDto: {

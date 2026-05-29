@@ -71,6 +71,20 @@ export class NewsController {
         }
     }
 
+    async findByTag(req: Request, res: Response) {
+        try {
+            const tagId = Number(req.params.tagId)
+            const limit = Number(req.query.limit) || 10
+            const page = Number(req.query.page) || 1
+            const offset = (page - 1) * limit
+
+            const news = await this.newsService.findByTagId(tagId, limit, offset)
+            return res.json(news)
+        } catch (err: any) {
+            return res.status(400).json({ error: err.message })
+        }
+    }
+
     async findFiltered(req: Request, res: Response) {
         try {
             const search = typeof req.query.q === 'string' ? req.query.q : undefined

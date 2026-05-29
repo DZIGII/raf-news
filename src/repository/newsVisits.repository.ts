@@ -27,4 +27,8 @@ export class NewsVisitsRepository {
         return NewsVisits.count({ where: { newsId } })
     }
 
+    async logVisit(newsId: number): Promise<void> {
+        await NewsVisits.create({ newsId })
+    }
+
 }

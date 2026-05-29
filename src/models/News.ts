@@ -39,12 +39,6 @@ export class News extends Model {
     })
     text!: string
 
-    @Column({
-        type: DataType.INTEGER.UNSIGNED,
-        allowNull: false,
-        defaultValue: 0
-    })
-    visits!: number
 
     @Column({
         type: DataType.DATE,
@@ -65,11 +59,6 @@ export class News extends Model {
     })
     dislike!: number
 
-    @Column({
-        type: DataType.INTEGER.UNSIGNED,
-        defaultValue: 0
-    })
-    numberOfVisits!: number
 
     @ForeignKey(() => User)
     @Column({

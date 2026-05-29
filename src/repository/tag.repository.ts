@@ -6,8 +6,8 @@ export class TagRepository {
         return Tag.findByPk(id);
     }
 
-    async findByName(name: string) {
-        return Tag.findOne({where: {name}})
+    async findByName(keyword: string) {
+        return Tag.findOne({where: {keyword}})
     }
 
     async findAll(limit: number, offset: number): Promise<Tag[]> {

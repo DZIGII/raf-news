@@ -5,7 +5,7 @@ import { sequelize } from './database/database';
 import swaggerUi from 'swagger-ui-express'
 import { swaggerSpec } from './config/swagger'
 import userRoutes from "./routes/user.router";
-
+import commentRoutes from "./routes/comment.router";
 
 
 
@@ -16,7 +16,7 @@ app.use(express.json())
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 app.use('/uploads', express.static('uploads'))
 app.use("/users", userRoutes)
-
+app.use("/comments", commentRoutes)
 
 app.get('/', (_req: Request, res: Response) => {
     res.json({message: 'test'})

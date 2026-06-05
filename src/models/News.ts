@@ -39,12 +39,6 @@ export class News extends Model {
     })
     text!: string
 
-    @Column({
-        type: DataType.INTEGER.UNSIGNED,
-        allowNull: false,
-        defaultValue: 0
-    })
-    visits!: number
 
     @Column({
         type: DataType.DATE,
@@ -65,17 +59,13 @@ export class News extends Model {
     })
     dislike!: number
 
-    @Column({
-        type: DataType.INTEGER.UNSIGNED,
-        defaultValue: 0
-    })
-    numberOfVisits!: number
 
     @ForeignKey(() => User)
     @Column({
         type: DataType.INTEGER.UNSIGNED,
         allowNull: false,
-        field: "user_id"
+        field: "user_id",
+        onDelete: 'CASCADE'
     })
     userId!: number;
 
@@ -96,9 +86,9 @@ export class News extends Model {
     @BelongsToMany(() => Tag, () => NewsTag)
     tags!: Tag[]
 
-    @HasMany(() => Comment)
+    @HasMany(() => Comment, {onDelete: 'CASCADE', hooks: true})
     comments!: Comment[]
 
-    @HasMany(() => NewsImage)
+    @HasMany(() => NewsImage, {onDelete: 'CASCADE', hooks: true})
     images!: NewsImage[]
 }

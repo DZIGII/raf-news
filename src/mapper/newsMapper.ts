@@ -1,6 +1,7 @@
 import { NewsDetailResponseDto } from "../dto/news/NewsDetaliResponseDto";
 import { NewsResponseDto } from "../dto/news/NewsResponseDto";
 import { News } from "../models/News";
+import { toCategoryResponseDto } from "./categoryMapper";
 import { toCommetResponsenDto } from "./commentMapper";
 import { toUserResponseDto } from "./userMapper";
 
@@ -9,12 +10,11 @@ export function toNewsDetailResponseDto(news: News): NewsDetailResponseDto {
         newsId: news.newsId,
         title: news.title,
         text: news.text,
-        visits: news.visits,
         createdAt: news.createdAt,
         like: news.like,
         dislike: news.dislike,
-        numberOfVisits: news.numberOfVisits,
         createdBy: toUserResponseDto(news.createdBy),
+        category: toCategoryResponseDto(news.category),
         comments: news.comments.map(toCommetResponsenDto),
         images: news.images.map(img => ({ imageId: img.imageId, imageUrl: img.imageUrl }))
     }

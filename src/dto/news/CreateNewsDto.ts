@@ -5,7 +5,6 @@ import { UserDto } from "../user/UserDto";
 export interface CreateNewsDto {
     title: string;
     text: string;
-    user: UserDto;
     category: CategoryDto;
     tags: TagDto[];
 }

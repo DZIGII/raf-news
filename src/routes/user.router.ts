@@ -146,8 +146,37 @@ router.get("/", authMiddleware, (req, res) => {
 })
 
 
+/**
+ * @openapi
+ * /users/delete/{id}:
+ *   delete:
+ *     tags: [Users]
+ *     summary: Delete a user (admin only)
+ *     description: Removes the user with the given id. Only callers with role ADMIN are allowed.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: integer }
+ *         description: ID of the user to delete
+ *     responses:
+ *       204:
+ *         description: User deleted (no content)
+ *       401:
+ *         description: Missing or invalid token
+ *       400:
+ *         description: Not authorized (non-admin) or deletion failed
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ */
 router.delete("/delete/:id", authMiddleware, (req, res) => {
     userController.delete(req, res)
 })
+
+
 
 export default router

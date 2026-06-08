@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const RelatedNews = ({ news = [] }) => {
     return (
         <div>
@@ -5,7 +7,9 @@ const RelatedNews = ({ news = [] }) => {
 
             {news.map((item) => (
                 <div key={item.newsId}>
-                    {item.title}
+                    <Link to={`/news/${item.newsId}`}>
+                        {item.title}
+                    </Link>
                 </div>
             ))}
         </div>

@@ -163,6 +163,39 @@ router.get("/tag/:tagId", (req, res) => {
 
 /**
  * @openapi
+ * /news/{id}/related:
+ *   get:
+ *     tags: [News]
+ *     summary: Get related news articles
+ *     description: Returns up to 5 news articles from the same category, excluding the current article. Results are ordered by newest first.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: integer }
+ *         description: News article id
+ *     responses:
+ *       200:
+ *         description: List of related news articles
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/NewsResponseDto'
+ *       400:
+ *         description: News article not found or lookup failed
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ */
+router.get("/:id/related", (req, res) => {
+    newsController.related(req, res);
+});
+
+/**
+ * @openapi
  * /news/{id}:
  *   get:
  *     tags: [News]
@@ -298,5 +331,7 @@ router.put("/:id", authMiddleware, upload.array("images"), (req, res) => {
 router.delete("/:id", authMiddleware, (req, res) => {
     newsController.delete(req, res)
 })
+
+
 
 export default router

@@ -100,5 +100,18 @@ export class NewsController {
         }
     }
 
+    async related(req: Request, res: Response) {
+        try {
+            const newsId = Number(req.params.id);
+
+            const result = await this.newsService.findRelated(newsId);
+
+            res.json(result);
+        } catch (e: any) {
+            res.status(400).json({
+                message: e.message
+            });
+        }
+    }
 
 }

@@ -66,4 +66,23 @@ export class NewsRepository {
         })
     }
 
+    async findRelated(newsId: number, limit: number = 5): Promise<News[]> {
+        const news = await News.findByPk(newsId);
+
+        if (!news) {
+            throw new Error("News does not exist");
+        }
+
+        return News.findAll({
+            where: {
+                categoryId: news.categoryId,
+                newsId: {
+                    [Op.ne]: newsId
+                }
+            },
+            limit,
+            order: [["createdAt", "DESC"]]
+        });
+    }
+
 }

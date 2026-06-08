@@ -125,7 +125,7 @@ export class NewsService {
         const news = await this.newsRepository.findByPk(id)
         if (!news) throw new Error('News does not exist')
 
-        if (user.role !== 'ADMIN' || user.userId !== news.userId) 
+        if (user.role !== 'ADMIN' && user.userId !== news.userId) 
             throw new Error('You are not allow to do that')
         
 
@@ -140,6 +140,10 @@ export class NewsService {
     async findByTagId(tagId: number, limit: number, offset: number): Promise<NewsResponseDto[]> {
         const news = await this.newsRepository.findByTagId(tagId, limit, offset)
         return news.map(toNewsResponseDto)
+    }
+
+    async findRelated(newsId: number) {
+        return this.newsRepository.findRelated(newsId);
     }
 
 }

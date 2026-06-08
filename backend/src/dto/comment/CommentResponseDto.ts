@@ -1,4 +1,5 @@
 export interface CommentResponseDto {
+    commentId: number;
     authorName: string;
     content: string;
     createdAt: Date;

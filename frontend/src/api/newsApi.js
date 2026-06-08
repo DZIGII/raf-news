@@ -27,3 +27,6 @@ export const updateNews = (id, formData) =>
 
 export const deleteNews = (id) =>
     api.delete(`/news/${id}`);
+
+export const getRelatedNews = (id) =>
+    api.get(`/news/${id}/related`);

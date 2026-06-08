@@ -4,6 +4,7 @@ import { Comment } from "../models/Comment";
 
 export function toCommetResponsenDto(comment: Comment): CommentResponseDto {
     return {
+        commentId: comment.commentId,
         authorName: comment.authorName,
         content: comment.content,
         createdAt: comment.createdAt,

@@ -1,6 +1,6 @@
 import { NewsService } from "../service/news.service";
-import { UserService } from "../service/user.service";
 import { Request, Response } from "express";
+import { setReactionsCookie } from "../middleware/readerReactions.middleware";
 
 export class NewsController {
 
@@ -12,8 +12,8 @@ export class NewsController {
             const page = Number(req.query.page) || 1
             const offset = (page - 1) * limit
 
-            const news = await this.newsService.findAll(limit, offset)
-            return res.json(news)
+            const result = await this.newsService.findAll(limit, offset)
+            return res.json(result)
         } catch (err: any) {
             return res.status(400).json({ error: err.message })
         }
@@ -22,9 +22,21 @@ export class NewsController {
     async newsDetail(req: Request, res: Response) {
         try {
             const id = Number(req.params.id)
-            const news = await this.newsService.newsDetail(id)
 
-            return res.json(news)
+            let visitedNews: number[] = []
+            try {
+                visitedNews = req.cookies?.visitedNews ? JSON.parse(req.cookies.visitedNews) : []
+            } catch { visitedNews = [] }
+
+            const result = await this.newsService.newsDetail(id, visitedNews)
+
+            res.cookie('visitedNews', JSON.stringify(result.visitedNews), {
+                httpOnly: false,
+                sameSite: 'lax',
+                maxAge: 365 * 24 * 60 * 60 * 1000
+            })
+
+            return res.json(result.news)
         } catch(err: any) {
             return res.status(400).json({ error: err.message })
         }
@@ -78,8 +90,8 @@ export class NewsController {
             const page = Number(req.query.page) || 1
             const offset = (page - 1) * limit
 
-            const news = await this.newsService.findByTagId(tagId, limit, offset)
-            return res.json(news)
+            const result = await this.newsService.findByTagId(tagId, limit, offset)
+            return res.json(result)
         } catch (err: any) {
             return res.status(400).json({ error: err.message })
         }
@@ -93,8 +105,8 @@ export class NewsController {
             const page = Number(req.query.page) || 1
             const offset = (page - 1) * limit
 
-            const news = await this.newsService.findFiltered(search, categoryId, limit, offset)
-            return res.json(news)
+            const result = await this.newsService.findFiltered(search, categoryId, limit, offset)
+            return res.json(result)
         } catch (err: any) {
             return res.status(400).json({ error: err.message })
         }
@@ -103,15 +115,41 @@ export class NewsController {
     async related(req: Request, res: Response) {
         try {
             const newsId = Number(req.params.id);
-
             const result = await this.newsService.findRelated(newsId);
-
             res.json(result);
         } catch (e: any) {
-            res.status(400).json({
-                message: e.message
-            });
+            res.status(400).json({ error: e.message });
         }
     }
 
+    async topReactions(req: Request, res: Response) {
+        try {
+            const result = await this.newsService.findTopReactions()
+            return res.json(result)
+        } catch (err: any) {
+            return res.status(400).json({ error: err.message })
+        }
+    }
+
+    async likeNews(req: Request, res: Response) {
+        try {
+            const id = Number(req.params.id)
+            const updated = await this.newsService.likeNews(id, req.reactions!)
+            setReactionsCookie(res, updated)
+            return res.status(204).send()
+        } catch (err: any) {
+            return res.status(400).json({ error: err.message })
+        }
+    }
+
+    async dislikeNews(req: Request, res: Response) {
+        try {
+            const id = Number(req.params.id)
+            const updated = await this.newsService.dislikeNews(id, req.reactions!)
+            setReactionsCookie(res, updated)
+            return res.status(204).send()
+        } catch (err: any) {
+            return res.status(400).json({ error: err.message })
+        }
+    }
 }

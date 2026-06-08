@@ -1,21 +1,15 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-
-import {
-    createCategory,
-    updateCategory,
-    getCategoryById
-} from "../../api/categoryApi";
+import { createCategory, updateCategory, getCategoryById } from "../../api/categoryApi";
 
 const CategoryFormPage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-
     const isEdit = !!id;
 
     const [name, setName] = useState("");
-    const [description, setDescription] =
-        useState("");
+    const [description, setDescription] = useState("");
+    const [error, setError] = useState("");
 
     useEffect(() => {
         if (isEdit) {
@@ -25,13 +19,9 @@ const CategoryFormPage = () => {
 
     const loadCategory = async () => {
         try {
-            const res =
-                await getCategoryById(id);
-
+            const res = await getCategoryById(id);
             setName(res.data.name);
-            setDescription(
-                res.data.description
-            );
+            setDescription(res.data.description);
         } catch (err) {
             console.error(err);
         }
@@ -39,72 +29,61 @@ const CategoryFormPage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError("");
+
+        if (!name.trim()) {
+            setError("Ime kategorije je obavezno");
+            return;
+        }
+        if (!description.trim()) {
+            setError("Opis kategorije je obavezan");
+            return;
+        }
 
         try {
             if (isEdit) {
                 await updateCategory({
-                    categoryId:
-                        Number(id),
+                    categoryId: Number(id),
                     name,
                     description
                 });
             } else {
-                await createCategory({
-                    name,
-                    description
-                });
+                await createCategory({ name, description });
             }
-
-            navigate(
-                "/cms/categories"
-            );
+            navigate("/cms/categories");
         } catch (err) {
-            console.error(err);
+            setError(err.response?.data?.error || "Greska pri cuvanju kategorije");
         }
     };
 
     return (
         <div>
-            <h1>
-                {isEdit
-                    ? "Edit Category"
-                    : "Create Category"}
-            </h1>
+            <h1>{isEdit ? "Izmeni kategoriju" : "Nova kategorija"}</h1>
 
-            <form
-                onSubmit={handleSubmit}
-            >
-                <input
-                    type="text"
-                    placeholder="Name"
-                    value={name}
-                    onChange={(e) =>
-                        setName(
-                            e.target.value
-                        )
-                    }
-                />
+            {error && <p style={{ color: "red" }}>{error}</p>}
 
-                <br />
-                <br />
+            <form onSubmit={handleSubmit}>
+                <div style={{ marginBottom: "15px" }}>
+                    <label>Ime:</label><br />
+                    <input
+                        type="text"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        style={{ padding: "8px", width: "300px" }}
+                    />
+                </div>
 
-                <textarea
-                    rows={5}
-                    placeholder="Description"
-                    value={description}
-                    onChange={(e) =>
-                        setDescription(
-                            e.target.value
-                        )
-                    }
-                />
+                <div style={{ marginBottom: "15px" }}>
+                    <label>Opis:</label><br />
+                    <textarea
+                        rows={5}
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        style={{ padding: "8px", width: "300px" }}
+                    />
+                </div>
 
-                <br />
-                <br />
-
-                <button type="submit">
-                    Save
-                </button>
+                <button type="submit" style={{ padding: "8px 20px" }}>Sacuvaj</button>
             </form>
         </div>
     );

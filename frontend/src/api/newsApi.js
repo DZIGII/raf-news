@@ -9,6 +9,9 @@ export const getNewsById = (id) =>
 export const getMostReadNews = () =>
     api.get("/news/most-read");
 
+export const getTopReactions = () =>
+    api.get("/news/top-reactions");
+
 export const filterNews = (params) =>
     api.get("/news/filter", { params });
 
@@ -30,3 +33,9 @@ export const deleteNews = (id) =>
 
 export const getRelatedNews = (id) =>
     api.get(`/news/${id}/related`);
+
+export const likeNews = (id) =>
+    api.post(`/news/${id}/like`);
+
+export const dislikeNews = (id) =>
+    api.post(`/news/${id}/dislike`);

@@ -20,7 +20,9 @@ const MostReadPage = () => {
 
     return (
         <div>
-            <h1>Most Read</h1>
+            <h1>Najcitanije vesti</h1>
+
+            {news.length === 0 && <p>Nema podataka.</p>}
 
             {news.map((item) => (
                 <NewsCard

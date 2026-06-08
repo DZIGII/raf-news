@@ -3,7 +3,6 @@ import {
   PrimaryKey, AutoIncrement, Unique
 } from 'sequelize-typescript'
 
-
 @Table({
     tableName: "categories",
     timestamps: false
@@ -17,7 +16,7 @@ export class Category extends Model {
         allowNull: false,
         field: "category_id"
     })
-    categoryId!: number
+    declare categoryId: number
 
     @Unique
     @Column({
@@ -25,13 +24,12 @@ export class Category extends Model {
         allowNull: false,
         field: "name"
     })
-    name!: string
+    declare name: string
 
     @Column({
         type: DataType.STRING,
         allowNull: false,
         field: "description"
     })
-    description!: string
-
+    declare description: string
 }

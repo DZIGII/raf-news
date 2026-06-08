@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { UserController } from "../controller/user.controller";
-import { authMiddleware } from "../middleware/auth.middleware";
+import { authMiddleware, roleMiddleware } from "../middleware/auth.middleware";
 
 const router = Router();
 const userController = new UserController();
@@ -18,7 +18,6 @@ const userController = new UserController();
  *   post:
  *     tags: [Users]
  *     summary: Register a new user
- *     description: Creates a new user account with role CREATOR and returns a JWT.
  *     requestBody:
  *       required: true
  *       content:
@@ -27,28 +26,18 @@ const userController = new UserController();
  *             $ref: '#/components/schemas/RegisterDto'
  *     responses:
  *       201:
- *         description: User created — returns JWT token
- *         content:
- *           application/json:
- *             schema:
- *               type: string
- *               example: eyJhbGciOiJIUzI1NiIs...
+ *         description: User created
  *       400:
- *         description: Validation or duplicate-email error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
+ *         description: Validation error
  */
-router.post("/register", (req, res) => userController.register(req, res));
+router.post("/register", authMiddleware, roleMiddleware("ADMIN"), (req, res) => userController.register(req, res));
 
 /**
  * @openapi
  * /users/login:
  *   post:
  *     tags: [Users]
- *     summary: Log in an existing user
- *     description: Validates credentials and returns a JWT.
+ *     summary: Log in
  *     requestBody:
  *       required: true
  *       content:
@@ -58,16 +47,8 @@ router.post("/register", (req, res) => userController.register(req, res));
  *     responses:
  *       200:
  *         description: Authentication successful
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/TokenResponse'
  *       400:
- *         description: Invalid credentials or disabled account
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
+ *         description: Invalid credentials
  */
 router.post("/login", (req, res) => {
     userController.login(req, res);
@@ -78,31 +59,9 @@ router.post("/login", (req, res) => {
  * /users/update:
  *   put:
  *     tags: [Users]
- *     summary: Update the currently authenticated user
- *     description: Updates the profile of the user identified by the JWT.
+ *     summary: Update current user
  *     security:
  *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/UpdateUserDto'
- *     responses:
- *       200:
- *         description: Updated user
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/UserResponseDto'
- *       401:
- *         description: Missing or invalid token
- *       400:
- *         description: Update failed
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.put("/update", authMiddleware, (req, res) => {
     userController.update(req, res)
@@ -110,41 +69,55 @@ router.put("/update", authMiddleware, (req, res) => {
 
 /**
  * @openapi
- * /users/users:
+ * /users:
  *   get:
  *     tags: [Users]
  *     summary: List all users (admin only)
  *     security:
  *       - bearerAuth: []
- *     parameters:
- *       - in: query
- *         name: limit
- *         schema: { type: integer, default: 10 }
- *         description: Page size
- *       - in: query
- *         name: page
- *         schema: { type: integer, default: 1 }
- *         description: 1-based page number
- *     responses:
- *       200:
- *         description: List of users
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/UserResponseDto'
- *       400:
- *         description: Not authorized (non-admin)
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.get("/", authMiddleware, (req, res) => {
     userController.findAll(req, res)
 })
 
+/**
+ * @openapi
+ * /users/{id}:
+ *   get:
+ *     tags: [Users]
+ *     summary: Get user by id
+ *     security:
+ *       - bearerAuth: []
+ */
+router.get("/:id", authMiddleware, (req, res) => {
+    userController.findById(req, res)
+})
+
+/**
+ * @openapi
+ * /users/{id}:
+ *   put:
+ *     tags: [Users]
+ *     summary: Update user by admin
+ *     security:
+ *       - bearerAuth: []
+ */
+router.put("/:id", authMiddleware, roleMiddleware("ADMIN"), (req, res) => {
+    userController.updateByAdmin(req, res)
+})
+
+/**
+ * @openapi
+ * /users/{id}/toggle-active:
+ *   patch:
+ *     tags: [Users]
+ *     summary: Toggle user active status (admin only)
+ *     security:
+ *       - bearerAuth: []
+ */
+router.patch("/:id/toggle-active", authMiddleware, roleMiddleware("ADMIN"), (req, res) => {
+    userController.toggleActive(req, res)
+})
 
 /**
  * @openapi
@@ -152,31 +125,11 @@ router.get("/", authMiddleware, (req, res) => {
  *   delete:
  *     tags: [Users]
  *     summary: Delete a user (admin only)
- *     description: Removes the user with the given id. Only callers with role ADMIN are allowed.
  *     security:
  *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema: { type: integer }
- *         description: ID of the user to delete
- *     responses:
- *       204:
- *         description: User deleted (no content)
- *       401:
- *         description: Missing or invalid token
- *       400:
- *         description: Not authorized (non-admin) or deletion failed
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.delete("/delete/:id", authMiddleware, (req, res) => {
     userController.delete(req, res)
 })
-
-
 
 export default router

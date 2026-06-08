@@ -7,7 +7,7 @@ const PublicLayout = () => {
         <div>
             <Navbar />
 
-            <div style={{ display: "flex", gap: "20px" }}>
+            <div style={{ display: "flex", gap: "20px", padding: "0 15px" }}>
                 <div style={{ flex: 3 }}>
                     <Outlet />
                 </div>

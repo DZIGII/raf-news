@@ -23,22 +23,21 @@ export class News extends Model {
         allowNull: false,
         field: "news_id"
     })
-    newsId!: number
+    declare newsId: number
 
     @Column({
         type: DataType.STRING,
         allowNull: false,
         field: "title"
     })
-    title!: string
+    declare title: string
 
     @Column({
         type: DataType.TEXT,
         allowNull: false,
         field: "text"
     })
-    text!: string
-
+    declare text: string
 
     @Column({
         type: DataType.DATE,
@@ -51,14 +50,13 @@ export class News extends Model {
       type: DataType.INTEGER.UNSIGNED,
       defaultValue: 0
     })
-    like!: number
+    declare like: number
 
     @Column({
       type: DataType.INTEGER.UNSIGNED,
       defaultValue: 0
     })
-    dislike!: number
-
+    declare dislike: number
 
     @ForeignKey(() => User)
     @Column({
@@ -67,7 +65,7 @@ export class News extends Model {
         field: "user_id",
         onDelete: 'CASCADE'
     })
-    userId!: number;
+    declare userId: number;
 
     @ForeignKey(() => Category)
     @Column({
@@ -75,20 +73,20 @@ export class News extends Model {
         allowNull: false,
         field: "category_id"
     })
-    categoryId!: number
+    declare categoryId: number
 
     @BelongsTo(() => Category)
-    category!: Category
+    declare category: Category
 
     @BelongsTo(() => User)
-    createdBy!: User;
+    declare createdBy: User;
 
     @BelongsToMany(() => Tag, () => NewsTag)
-    tags!: Tag[]
+    declare tags: Tag[]
 
     @HasMany(() => Comment, {onDelete: 'CASCADE', hooks: true})
-    comments!: Comment[]
+    declare comments: Comment[]
 
     @HasMany(() => NewsImage, {onDelete: 'CASCADE', hooks: true})
-    images!: NewsImage[]
+    declare images: NewsImage[]
 }

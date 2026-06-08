@@ -1,6 +1,13 @@
 export interface NewsResponseDto {
     newsId: number;
     title: string;
+    text: string;
+    createdAt: Date;
     mainImage: string | null;
-    tagIds: number[];
+    categoryName: string;
+    categoryId: number;
+    authorName: string;
+    like: number;
+    dislike: number;
+    tags: { tagId: number; keyword: string }[];
 }

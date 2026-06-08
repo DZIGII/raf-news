@@ -2,12 +2,13 @@ import { UserResponseDto } from "../dto/user/UserResponseDto";
 import { User } from "../models/User";
 
 export function toUserResponseDto(user: User): UserResponseDto {
+    const d: any = user.toJSON();
     return {
-        userId: user.userId,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        role: user.role,
-        isActive:user.isActive
+        userId: d.userId,
+        firstName: d.firstName,
+        lastName: d.lastName,
+        email: d.email,
+        role: d.role,
+        isActive: d.isActive
     }
 }

@@ -6,6 +6,7 @@ import Pagination from "../../components/Pagination";
 const HomePage = () => {
     const [news, setNews] = useState([]);
     const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
 
     useEffect(() => {
         loadNews();
@@ -13,9 +14,9 @@ const HomePage = () => {
 
     const loadNews = async () => {
         try {
-            const res = await getNews(page);
-
-            setNews(res.data);
+            const res = await getNews(page, 10);
+            setNews(res.data.news);
+            setTotalPages(Math.ceil(res.data.total / 10));
         } catch (err) {
             console.error(err);
         }
@@ -23,7 +24,7 @@ const HomePage = () => {
 
     return (
         <div>
-            <h1>Latest News</h1>
+            <h1>Najnovije vesti</h1>
 
             {news.map((item) => (
                 <NewsCard
@@ -34,7 +35,7 @@ const HomePage = () => {
 
             <Pagination
                 page={page}
-                totalPages={999}
+                totalPages={totalPages}
                 onPageChange={setPage}
             />
         </div>

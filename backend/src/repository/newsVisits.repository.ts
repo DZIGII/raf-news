@@ -18,7 +18,7 @@ export class NewsVisitsRepository {
         })
 
         return rows.map(r => ({
-            newsId: r.newsId,
+            newsId: r.get('newsId') as number,
             visitCount: Number(r.get('visitCount'))
         }))
     }

@@ -44,7 +44,7 @@ export class CategoryService {
 
     async updateCategory(data: CategoryDto): Promise<CategoryResponseDto> {
         const existing = await this.categoryRepository.findByName(data.name)
-        if (existing && existing.categoryId !== data.categoryId)
+        if (existing && existing.get('categoryId') !== data.categoryId)
             throw new Error('Category with that name already exists')
 
         const category = await this.categoryRepository.updateCategory(data)

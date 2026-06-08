@@ -17,14 +17,14 @@ export class Tag extends Model {
         type: DataType.INTEGER.UNSIGNED,
         field: "tag_id"
     })
-    tagId!: number
+    declare tagId: number
 
     @Column({
         type: DataType.STRING,
         allowNull: false
     })
-    keyword!: string
+    declare keyword: string
 
     @BelongsToMany(() => News, () => NewsTag)
-    news!: News[]
+    declare news: News[]
 }

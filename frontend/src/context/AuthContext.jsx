@@ -35,7 +35,7 @@ export const AuthProvider = ({ children }) => {
         }
 
         setUser({
-            id: decoded.id,
+            id: decoded.userId,
             email: decoded.email,
             role: decoded.role,
             name: decoded.name
@@ -55,7 +55,7 @@ export const AuthProvider = ({ children }) => {
         const decoded = parseToken(jwt);
 
         setUser({
-            id: decoded.id,
+            id: decoded.userId,
             email: decoded.email,
             role: decoded.role,
             name: decoded.name

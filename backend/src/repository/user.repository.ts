@@ -30,4 +30,8 @@ export class UserRepostiory {
         return user.update(userData)
     }
 
+    async countAll(): Promise<number> {
+        return User.count()
+    }
+
 }

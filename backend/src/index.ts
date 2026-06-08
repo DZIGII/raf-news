@@ -1,6 +1,7 @@
 import 'dotenv/config'
 import 'reflect-metadata'
 import express, {Request, Response} from 'express'
+import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import { sequelize } from './database/database';
 import swaggerUi from 'swagger-ui-express'
@@ -17,6 +18,10 @@ import tagRoutes from "./routes/tag.router";
 const app = express();
 const PORT = 3000;
 
+app.use(cors({
+    origin: ['http://localhost:5173', 'http://localhost:5174'],
+    credentials: true
+}))
 app.use(express.json())
 app.use(cookieParser())
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))

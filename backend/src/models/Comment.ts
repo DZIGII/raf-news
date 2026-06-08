@@ -16,20 +16,20 @@ export class Comment extends Model {
         type: DataType.INTEGER.UNSIGNED,
         field: "comment_id"
     })
-    commentId!: number
+    declare commentId: number
 
     @Column({
         type: DataType.STRING,
         allowNull: false,
         field: "author_name"
     })
-    authorName!: string
+    declare authorName: string
 
     @Column({
         type: DataType.TEXT,
         allowNull: false
     })
-    content!: string
+    declare content: string
 
     @Column({
         type: DataType.DATE,
@@ -42,13 +42,13 @@ export class Comment extends Model {
       type: DataType.INTEGER.UNSIGNED,
       defaultValue: 0
     })
-    like!: number
+    declare like: number
 
     @Column({
       type: DataType.INTEGER.UNSIGNED,
       defaultValue: 0
     })
-    dislike!: number
+    declare dislike: number
 
     @ForeignKey(() => News)
     @Column({
@@ -56,8 +56,8 @@ export class Comment extends Model {
         allowNull: false,
         field: "news_id"
     })
-    newsId!: number
+    declare newsId: number
 
     @BelongsTo(() => News)
-    news!: News
+    declare news: News
 }

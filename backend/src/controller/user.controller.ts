@@ -7,7 +7,7 @@ export class UserController {
     async login(req: Request, res: Response) {
         try {
             const token = await this.userService.login(req.body)
-            return res.json({ token })
+            return res.json(token)
         } catch (err: any) {
             return res.status(400).json({ error: err.message })
         }
@@ -15,8 +15,8 @@ export class UserController {
 
     async register(req: Request, res: Response) {
         try {
-            const user = await this.userService.register(req.body)
-            return res.status(201).json(user)
+            const token = await this.userService.register(req.body)
+            return res.status(201).json(token)
         } catch (err: any) {
             return res.status(400).json({ error: err.message })
         }
@@ -31,6 +31,35 @@ export class UserController {
         }
     }
 
+    async updateByAdmin(req: Request, res: Response) {
+        try {
+            const userId = Number(req.params.id)
+            const updated = await this.userService.updateByAdmin(userId, req.body, req.user!)
+            return res.json(updated)
+        } catch (err: any) {
+            return res.status(400).json({ error: err.message })
+        }
+    }
+
+    async toggleActive(req: Request, res: Response) {
+        try {
+            const userId = Number(req.params.id)
+            const updated = await this.userService.toggleActive(userId, req.user!)
+            return res.json(updated)
+        } catch (err: any) {
+            return res.status(400).json({ error: err.message })
+        }
+    }
+
+    async findById(req: Request, res: Response) {
+        try {
+            const userId = Number(req.params.id)
+            const user = await this.userService.findById(userId)
+            return res.json(user)
+        } catch (err: any) {
+            return res.status(400).json({ error: err.message })
+        }
+    }
 
     async delete(req: Request, res: Response) {
         try {
@@ -48,12 +77,10 @@ export class UserController {
             const page = Number(req.query.page) || 1
             const offset = (page - 1) * limit
 
-            const users = await this.userService.findAll(limit, offset, req.user!)
-            return res.json(users)
+            const result = await this.userService.findAll(limit, offset, req.user!)
+            return res.json(result)
         } catch (err: any) {
             return res.status(400).json({ error: err.message })
         }
     }
-
-    
 }

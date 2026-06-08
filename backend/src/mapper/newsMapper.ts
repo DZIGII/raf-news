@@ -6,25 +6,35 @@ import { toCommetResponsenDto } from "./commentMapper";
 import { toUserResponseDto } from "./userMapper";
 
 export function toNewsDetailResponseDto(news: News): NewsDetailResponseDto {
+    const d: any = news.toJSON();
     return {
-        newsId: news.newsId,
-        title: news.title,
-        text: news.text,
-        createdAt: news.createdAt,
-        like: news.like,
-        dislike: news.dislike,
-        createdBy: toUserResponseDto(news.createdBy),
-        category: toCategoryResponseDto(news.category),
-        comments: news.comments.map(toCommetResponsenDto),
-        images: news.images.map(img => ({ imageId: img.imageId, imageUrl: img.imageUrl }))
+        newsId: d.newsId,
+        title: d.title,
+        text: d.text,
+        createdAt: d.createdAt,
+        like: d.like,
+        dislike: d.dislike,
+        createdBy: news.createdBy ? toUserResponseDto(news.createdBy) : undefined as any,
+        category: news.category ? toCategoryResponseDto(news.category) : undefined as any,
+        comments: news.comments?.map(toCommetResponsenDto) || [],
+        tags: d.tags?.map((t: any) => ({ tagId: t.tagId, keyword: t.keyword })) || [],
+        images: d.images?.map((img: any) => ({ imageId: img.imageId, imageUrl: img.imageUrl })) || []
     }
 }
 
 export function toNewsResponseDto(news: News): NewsResponseDto {
+    const d: any = news.toJSON();
     return {
-        newsId: news.newsId,
-        title: news.title,
-        mainImage: news.images?.[0]?.imageUrl ?? null,
-        tagIds: news.tags.map(tag => tag.tagId)
+        newsId: d.newsId,
+        title: d.title,
+        text: d.text,
+        createdAt: d.createdAt,
+        mainImage: d.images?.[0]?.imageUrl ?? null,
+        categoryName: d.category?.name ?? '',
+        categoryId: d.categoryId,
+        authorName: d.createdBy ? `${d.createdBy.firstName} ${d.createdBy.lastName}` : '',
+        like: d.like,
+        dislike: d.dislike,
+        tags: d.tags?.map((t: any) => ({ tagId: t.tagId, keyword: t.keyword })) || []
     }
 }

@@ -15,5 +15,11 @@ export const sequelize = new Sequelize({
     database: process.env.DB_NAME!,
     username: process.env.DB_USER!,
     password: String(process.env.DB_PASS)!,
-    models: [User, News, Tag, NewsTag, Comment, NewsImage, Category, NewsVisits]
+    models: [User, News, Tag, NewsTag, Comment, NewsImage, Category, NewsVisits],
+    dialectOptions: process.env.DB_SSL === 'true' ? {
+        ssl: {
+            require: true,
+            rejectUnauthorized: false
+        }
+    } : {}
 })

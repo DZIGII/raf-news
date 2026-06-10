@@ -19,7 +19,11 @@ const app = express();
 const PORT = 3000;
 
 app.use(cors({
-    origin: ['http://localhost:5173', 'http://localhost:5174'],
+    origin: [
+        'http://localhost:5173', 
+        'http://localhost:5174',
+        'https://timely-khapse-fb4d63.netlify.app'
+    ],
     credentials: true
 }))
 app.use(express.json())

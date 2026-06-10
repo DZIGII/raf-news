@@ -1,0 +1,1 @@
+{"version":3,"file":"newsMapper.d.ts","sourceRoot":"","sources":["../../src/mapper/newsMapper.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,qBAAqB,EAAE,MAAM,mCAAmC,CAAC;AAC1E,OAAO,EAAE,eAAe,EAAE,MAAM,6BAA6B,CAAC;AAC9D,OAAO,EAAE,IAAI,EAAE,MAAM,gBAAgB,CAAC;AAKtC,wBAAgB,uBAAuB,CAAC,IAAI,EAAE,IAAI,GAAG,qBAAqB,CAezE;AAED,wBAAgB,iBAAiB,CAAC,IAAI,EAAE,IAAI,GAAG,eAAe,CAe7D"}

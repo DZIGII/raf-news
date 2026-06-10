@@ -1,0 +1,1 @@
+{"version":3,"file":"CommentDto.d.ts","sourceRoot":"","sources":["../../../src/dto/comment/CommentDto.ts"],"names":[],"mappings":"AAAA,MAAM,WAAW,UAAU;IACvB,SAAS,EAAE,MAAM,CAAC;IAClB,UAAU,EAAE,MAAM,CAAC;IACnB,OAAO,EAAE,MAAM,CAAC;IAChB,SAAS,EAAE,IAAI,CAAC;IAChB,MAAM,EAAE,MAAM,CAAC;CAClB"}

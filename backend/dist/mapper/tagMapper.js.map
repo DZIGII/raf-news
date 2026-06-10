@@ -1,0 +1,1 @@
+{"version":3,"file":"tagMapper.js","sourceRoot":"","sources":["../../src/mapper/tagMapper.ts"],"names":[],"mappings":";;AAGA,4CAMC;AAND,SAAgB,gBAAgB,CAAC,GAAQ;IACrC,MAAM,CAAC,GAAQ,GAAG,CAAC,MAAM,EAAE,CAAC;IAC5B,OAAO;QACH,KAAK,EAAE,CAAC,CAAC,KAAK;QACd,OAAO,EAAE,CAAC,CAAC,OAAO;KACrB,CAAA;AACL,CAAC"}

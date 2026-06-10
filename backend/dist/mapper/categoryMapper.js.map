@@ -1,0 +1,1 @@
+{"version":3,"file":"categoryMapper.js","sourceRoot":"","sources":["../../src/mapper/categoryMapper.ts"],"names":[],"mappings":";;AAGA,sDAOC;AAPD,SAAgB,qBAAqB,CAAC,QAAkB;IACpD,MAAM,CAAC,GAAQ,QAAQ,CAAC,MAAM,EAAE,CAAC;IACjC,OAAO;QACH,UAAU,EAAE,CAAC,CAAC,UAAU;QACxB,IAAI,EAAE,CAAC,CAAC,IAAI;QACZ,WAAW,EAAE,CAAC,CAAC,WAAW;KAC7B,CAAA;AACL,CAAC"}
